@@ -1,6 +1,6 @@
 # API Sawarga
 
-[![Gitter chat](https://badges.gitter.im/chriskacerguis/codeigniter-restserver.png)](https://gitter.im/codeigniter-restserver/Lobby) [![Build Status](https://travis-ci.org/chriskacerguis/codeigniter-restserver.svg?branch=master)](https://travis-ci.org/chriskacerguis/codeigniter-restserver)
+[![Gitter chat](https://badges.gitter.im/chriskacerguis/codeigniter-restserver.png)](https://gitter.im/infomugi/sawarga) [![Build Status](https://travis-ci.org/chriskacerguis/codeigniter-restserver.svg?branch=master)](https://travis-ci.org//infomugi/sawarga)
 
 A fully RESTful server for Sawarga Apps
 
