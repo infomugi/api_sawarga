@@ -9,6 +9,7 @@ class User extends CI_Controller {
     $this->load->model('muser'); 
     $this->load->model('mmail'); 
     $this->load->model('msdrt'); 
+    $this->load->model('mnotificationlist'); 
   }
 
   public function index() 
