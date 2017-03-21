@@ -46,4 +46,21 @@ class MSdrt extends CI_Model{
 		return $r; 
 	}	
 
+	public function listUsersUnverified($id) 
+	{
+		$query = $this->db->query("
+			select
+			u.fullname as u_name, u.avatar as u_image,
+			(select count(user_id1) from user_relasi where user_id2='$id' AND status=0) as invite_count,
+			r.*
+			from
+			user_relasi r
+			left join user as u on u.id = r.user_id1
+			where
+			r.user_id2='$id'
+			and r.status=0
+			");
+		return   $query->result(); 
+	}		
+
 }

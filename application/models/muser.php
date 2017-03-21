@@ -91,11 +91,4 @@ class MUser extends CI_Model{
 		return $this->db->get($this->table);
 	}	
 
-	public function listUsersUnverified($limit, $start) 
-	{
-		$query = $this->db->query("SELECT * FROM user_relasi LEFT JOIN user as u ON u.id=user_id1 WHERE user_id2='$id' AND status=0 LIMIT 0,10");
-		return   $query->result(); 
-	}		
-
-
 }

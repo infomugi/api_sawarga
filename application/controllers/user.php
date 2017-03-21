@@ -427,15 +427,15 @@ public function sendPinInvitation()
     $sdrt2 = $this->msdrt->getRelationship($sdrt);
 
     //Apabila Anak = 3 Undang Ayah / Ibu, Cek Gender Apabila Ayah SDRT = 1 / Ibu  SDRT = 2 
-    if($sdrt==3){
-      if($row2->gender==1){
-      //Father
-        $sdrt = 1;
-      }else{
-      //Mother
-        $sdrt = 2;
-      }
-    }
+    // if($sdrt==3){
+    //   if($row2->gender==1){
+    //   //Father
+    //     $sdrt = 1;
+    //   }else{
+    //   //Mother
+    //     $sdrt = 2;
+    //   }
+    // }
 
     // Invers Relationship 
     $data1 = array(
@@ -459,6 +459,20 @@ public function sendPinInvitation()
     //Save to USER_RELASI_USER 2
     $invite = $this->msdrt->save($data2);
 
+    //Data Notifikasi
+    date_default_timezone_set('Asia/Jakarta');
+    $newsDate=date("Y-m-d H:i:s");
+
+    $dataNotif = array(
+      'created_date' => $newsDate,
+      'subject_id' => $row1->id,
+      'type' => 3 ,
+      'object_id' => $row2->id,
+      'status' => 1,
+      );
+
+    $insert = $this->mnotificationlist->save($dataNotif);
+
     //Response
     $response["success"] = 1;
     $response["message"] = "Success";
@@ -478,10 +492,10 @@ public function sendPinInvitation()
 
 public function listUsersUnverified()
 {
-  $start =$_POST['start'];
-  $limit =$_POST['limit'];
+  //Menampilkan List yang Belum di Verifikasi Id Berdasarkan yang Login
+  $id =$_POST['id'];
 
-  $data = $this->muser->listUsersUnverified($limit,$start);
+  $data = $this->msdrt->listUsersUnverified($id);
   $output = array(
     "feed" => $data,
     );
