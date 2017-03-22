@@ -520,7 +520,8 @@ public function UpdateRelationship()
 
   $status = $_POST['status']; // STATUS = Jika Di Approve
   $id = $_POST['id']; //ID = dari tabel user_relasi
-  $userId = $_POST['userId']; //ID = dari tabel User
+  $anunginvite = $_POST['anunginvite']; //ID = dari tabel User (User yang Invite)
+  $anungapprove = $_POST['anungapprove']; //ID = dari tabel User (User yang Approve)
 
   //Update Relationship
   $update = $this->msdrt->updateRelationship($status,$id);
@@ -529,32 +530,33 @@ public function UpdateRelationship()
   if($status==1){
 
     //Cek Small Family
-    $smallfamily = $this->msdrt->getSmallFamily($userId);
+    $smallfamily_invite = $this->msdrt->getSmallFamily($anunginvite);
+    $smallfamily_approve = $this->msdrt->getSmallFamily($anungapprove);
 
-    //Data Keluarga Kecil
-    $datas = array(
-      'id' => $idBaru,
-      'group_id' => 1,
-      'status' => 1,
-      'name' => "",
-      'big_family_id' => 0,
-      ); 
+    // //Apabila Belum Punya Keluarga, Maka Dibuat Small Family
+    // if($smallfamily_approve=="0"){       
 
-    //Apabila Belum Punya Keluarga, Maka Dibuat Small Family
-    if($smallfamily=="0"){       
+    // // //Data Keluarga Kecil
+    // //   $datas = array(
+    // //     'id' => $idBaru,
+    // //     'group_id' => 1,
+    // //     'status' => 1,
+    // //     'name' => "",
+    // //     'big_family_id' => 0,
+    // //     ); 
 
-      //Save to USER_RELASI
-      $this->msdrt->saveSmallFamily($datas);    
+    // //   //Save to USER_RELASI
+    // //   $this->msdrt->saveSmallFamily($datas);    
 
-      //Update Small Family ID Jika Kosong
-      $this->msdrt->updateSmallFamily($datas['id'],$userId);    
+    //   //Update Small Family ID Jika Kosong
+    //   $this->msdrt->updateSmallFamily($smallfamily_invite,$anungapprove);    
 
-    }else{
+    // }else{
 
       //Update Small Family ID Jika Ada
-      $this->msdrt->updateSmallFamily($datas['id'],$userId);    
+    $this->msdrt->updateSmallFamily($smallfamily_invite,$anungapprove);    
 
-    }
+    // }
 
     $response["success"] = 1;
     $response["message"] = "Accept";
@@ -568,6 +570,19 @@ public function UpdateRelationship()
   }
 
   echo json_encode($response);
+} 
+
+
+public function listSmallFamily()
+{
+  //Menampilkan List yang Belum di Verifikasi Id Berdasarkan yang Login
+  $id =$_POST['id'];
+
+  $data = $this->msdrt->listSmallFamily($id);
+  $output = array(
+    "feed" => $data,
+    );
+  echo json_encode($output);
 } 
 // END : MUGI
 

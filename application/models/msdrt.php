@@ -97,6 +97,17 @@ class MSdrt extends CI_Model{
 		return	 $query->result(); 
 	}		
 
+	public function listSmallFamily($id) 
+	{
+
+		$this->db->select('fullname as u_name');
+		$this->db->select('avatar as u_image');
+		$this->db->select('(select count(id) from user where small_family_id='.$id.') as family_count', FALSE);
+		$this->db->where('small_family_id', $id);
+		$query = $this->db->get('user');
+		return $query->result(); 
+	}	
+
 	// END: Mugi	
 
 }
