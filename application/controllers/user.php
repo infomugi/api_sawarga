@@ -265,6 +265,8 @@ public function emailConfirmation($kode)
   echo json_encode($response);
 }
 
+// START: MUGI
+
 public function sendEmailInvitation()
 { 
   $response = array();
@@ -504,5 +506,69 @@ public function listUsersUnverified()
 } 
 
 
+public function UpdateRelationship()
+{
+  //Id = Auto Increment ID Relasi
+  $data['id'] = $this->msdrt->getIdSmallFamily();
+  foreach ($data['id'] as $key) {
+    $idBaru = $key->id + 1;
+  }    
+
+  //Status 0 = Unverified
+  //Status 1 = Accept
+  //Status 2 = Reject
+
+  $status = $_POST['status']; // STATUS = Jika Di Approve
+  $id = $_POST['id']; //ID = dari tabel user_relasi
+  $userId = $_POST['userId']; //ID = dari tabel User
+
+  //Update Relationship
+  $update = $this->msdrt->updateRelationship($status,$id);
+
+  //Jika di Klik Approve
+  if($status==1){
+
+    //Cek Small Family
+    $smallfamily = $this->msdrt->getSmallFamily($userId);
+
+    //Data Keluarga Kecil
+    $datas = array(
+      'id' => $idBaru,
+      'group_id' => 1,
+      'status' => 1,
+      'name' => "",
+      'big_family_id' => 0,
+      ); 
+
+    //Apabila Belum Punya Keluarga, Maka Dibuat Small Family
+    if($smallfamily=="0"){       
+
+      //Save to USER_RELASI
+      $this->msdrt->saveSmallFamily($datas);    
+
+      //Update Small Family ID Jika Kosong
+      $this->msdrt->updateSmallFamily($datas['id'],$userId);    
+
+    }else{
+
+      //Update Small Family ID Jika Ada
+      $this->msdrt->updateSmallFamily($datas['id'],$userId);    
+
+    }
+
+    $response["success"] = 1;
+    $response["message"] = "Accept";
+
+  //Jika di Klik Reject
+  }else{
+
+    $response["success"] = 0;
+    $response["message"] = "Reject";
+
+  }
+
+  echo json_encode($response);
+} 
+// END : MUGI
 
 }

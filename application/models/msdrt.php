@@ -21,6 +21,7 @@ class MSdrt extends CI_Model{
 		return	 $query->result(); 
 	}
 
+	// START: Mugi
 	public function save($data)
 	{
 		return $this->db->insert('user_relasi_user', $data);
@@ -61,6 +62,41 @@ class MSdrt extends CI_Model{
 			and r.status=0
 			");
 		return   $query->result(); 
+	}	
+
+	public function updateRelationship($status,$id)
+	{	
+		$this->db->set('status', $status);
+		$this->db->where('id', $id);
+		return $this->db->update('user_relasi');
 	}		
+
+	public function getSmallFamily($id)
+	{	
+		$query = $this->db->query("SELECT small_family_id FROM user WHERE id ='$id'");
+		$tes = $query->row(); 
+		$r = $tes->small_family_id;
+		return $r; 
+	}	
+
+	public function saveSmallFamily($data)
+	{
+		return $this->db->insert('small_family', $data);
+	}		
+
+	public function updateSmallFamily($smallfamily,$id)
+	{	
+		$this->db->set('small_family_id', $smallfamily);
+		$this->db->where('id', $id);
+		return $this->db->update('user');
+	}	
+
+	public function getIdSmallFamily()
+	{	
+		$query = $this->db->query("SELECT max(id) as id FROM small_family");
+		return	 $query->result(); 
+	}		
+
+	// END: Mugi	
 
 }
