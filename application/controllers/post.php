@@ -9,6 +9,7 @@ class Post extends CI_Controller {
     $this->load->helper(array('form', 'url'));
     $this->load->model('mpost');
     $this->load->model('muser');
+    $this->load->model('mwidget');
   }
 
   public function index() 
@@ -72,7 +73,7 @@ class Post extends CI_Controller {
       'id' => $idBaru,
       'created_date' => $newsDate,
       'user_id' => $this->input->post('user_id'),
-      'description' => $this->input->post('description'),
+      'description' => $this->mwidget->filter($this->input->post('description')),
       'like_count' => 0,
       'comment_count' => 0,
       'status' => 0,

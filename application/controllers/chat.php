@@ -87,7 +87,7 @@ class Chat extends CI_Controller {
       'chat_room_id' => $this->input->post('chatRoomsId'),
       'file' => "",
       'status' => "1",
-      'message' => $this->mwidget->filter($id$this->input->post('isiPesan'));,
+      'message' => $this->mwidget->filter($this->input->post('isiPesan')),
       );
 
     $isiPesan = $this->input->post('isiPesan');
