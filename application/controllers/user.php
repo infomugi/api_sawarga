@@ -573,9 +573,9 @@ public function UpdateRelationship()
 } 
 
 
+  //Menampilkan List yang Belum di Verifikasi Id Berdasarkan yang Login
 public function listSmallFamily()
 {
-  //Menampilkan List yang Belum di Verifikasi Id Berdasarkan yang Login
   $id =$_POST['id'];
 
   $data = $this->msdrt->listSmallFamily($id);
@@ -584,6 +584,82 @@ public function listSmallFamily()
     );
   echo json_encode($output);
 } 
+
+  //Tentukan Nama Keluarga Kecil
+public function setSmallFamily(){
+  $name = $_POST['name'];
+  $userId = $_POST['userId'];
+
+  $smallfamilyid = $this->msdrt->getSmallFamily($userId);
+
+  $data = array(
+    'group_id' => $smallfamilyid,
+    'name' => $name,
+    'status' => 1,
+    'big_family_id' => 0,
+    );          
+
+  $smallfamily = $this->msdrt->saveSmallFamily($data);
+  $response["success"] = 1;
+  $response["message"] = "Success";  
+  echo json_encode($response);
+}
+
+  //Tentukan Nama Keluarga Besar
+public function setBigFamily(){
+  $name = $_POST['name'];
+
+  $data = array(
+    'name' => $name,
+    'status' => 1,
+    );          
+
+  $bigfamily = $this->msdrt->saveBigFamily($data);
+  $response["success"] = 1;
+  $response["message"] = "Success";
+  echo json_encode($response);
+
+}
+
+//Menambahkan Keluarga Kecil ke Keluarga Besar
+public function setSmallToBig(){
+
+  $smallfamilyid = $_POST['smallfamilyid'];
+  $bigfamilyid = $_POST['bigfamilyid'];
+
+  $query = $this->db->query("select id FROM big_family WHERE id = '$bigfamilyid'");
+  if($query->num_rows() > 0){
+
+    $updateSmallToBig = $this->msdrt->updateSmallToBig($smallfamilyid,$bigfamilyid);
+
+    $response["success"] = 1;
+    $response["message"] = "Success";
+
+  }else{
+
+    $response["success"] = 0;
+    $response["message"] = "Failed";
+
+  }
+
+  echo json_encode($response);
+
+}
+
+
+public function listBigFamily()
+{
+  $id =$_POST['id'];
+
+  $data = $this->msdrt->listBigFamily($id);
+  $output = array(
+    "feed" => $data,
+    );
+  echo json_encode($output);
+} 
+
+
+
 // END : MUGI
 
 }

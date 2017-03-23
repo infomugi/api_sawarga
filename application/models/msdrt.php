@@ -108,6 +108,48 @@ class MSdrt extends CI_Model{
 		return $query->result(); 
 	}	
 
+	public function saveBigFamily($data)
+	{
+		return $this->db->insert('big_family', $data);
+	}		
+
+	public function updateSmallToBig($smallfamily,$bigfamily)
+	{	
+		$this->db->set('big_family_id', $bigfamily);
+		$this->db->where('id', $smallfamily);
+		return $this->db->update('small_family');
+	}	
+
+	public function getBigFamily($id) 
+	{
+
+		$this->db->select('id');
+		$this->db->where('id', $id);
+		$query = $this->db->get('big_family');
+		return $query->result(); 
+	}	
+
+
+	public function listBigFamily($id)
+	{	
+		$query = $this->db->query("
+			SELECT
+			u.fullname AS u_name,
+			u.avatar AS u_image,
+			s.name AS small_family,
+			TIMESTAMPDIFF(YEAR, u.birth, CURDATE()) AS age
+			FROM
+			USER AS u
+			LEFT JOIN small_family s ON u.small_family_id = s.group_id
+			LEFT JOIN big_family b ON s.big_family_id = b.id
+			WHERE
+			s.big_family_id = ".$id."
+			ORDER BY
+			small_family ASC, age DESC
+			");
+		return $query->result(); 
+	}			
+
 	// END: Mugi	
 
 }
